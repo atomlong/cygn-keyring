@@ -18,12 +18,12 @@ GPG="gpg --quiet --batch --no-tty --no-permission-warning --keyserver "${KEYSERV
 pushd "$(dirname "$0")" >/dev/null
 
 $GPG --gen-key <<EOF
-%echo Generating Arch Linux eyun Keyring keychain master key...
+%echo Generating Arch Linux cygn Keyring keychain master key...
 Key-Type: RSA
 Key-Length: 1024
 Key-Usage: sign
-Name-Real: Arch Linux eyun Keyring Keychain Master Key
-Name-Email: eyun-keyring@localhost
+Name-Real: Arch Linux cygn Keyring Keychain Master Key
+Name-Email: cygn-keyring@localhost
 Expire-Date: 0
 %no-protection
 %no-ask-passphrase
@@ -31,7 +31,7 @@ Expire-Date: 0
 %echo Done
 EOF
 
-rm -rf master{,-revoked} packager{,-revoked} eyun-{trusted,revoked}
+rm -rf master{,-revoked} packager{,-revoked} cygn-{trusted,revoked}
 mkdir master packager packager-revoked
 
 # master-keyids
@@ -43,16 +43,16 @@ while read -ra data; do
 		${GPG} --command-fd 0 --edit-key ${keyid}
 	${GPG} --yes --lsign-key ${keyid} &>/dev/null
 	${GPG} --armor --no-emit-version --export ${keyid} >> master/${username}.asc
-	echo "${keyid}:4:" >> eyun-trusted
+	echo "${keyid}:4:" >> cygn-trusted
 done < master-keyids
-${GPG} --import-ownertrust < eyun-trusted 2>/dev/null
+${GPG} --import-ownertrust < cygn-trusted 2>/dev/null
 
 # master-revoked-keyids
 while read -ra data; do
 	keyid="${data[0]}"
 	username="${data[1]}"
 	"${GPG[@]}" --comment "revoked master-key: ${username} (${keyid})" --export ${keyid} >> master-revoked/${username}.asc
-	echo "${keyid}" >> eyun-revoked
+	echo "${keyid}" >> cygn-revoked
 done < master-revoked-keyids
 
 # packager-keyids
@@ -81,12 +81,12 @@ while read -ra data; do
 		${GPG} --command-fd 0 --edit-key ${keyid}
 	if ! ${GPG} --list-keys --with-colons ${keyid} 2>/dev/null | grep -Pq '^pub:(f|-):'; then
 		${GPG} --armor --no-emit-version --export ${keyid} >> packager-revoked/${username}.asc
-		echo "${keyid}" >> eyun-revoked
+		echo "${keyid}" >> cygn-revoked
 	else
 		echo "key is still fully trusted: ${keyid} ${username}"
 	fi
 done < packager-revoked-keyids
 
-cat master/*.asc master-revoked/*.asc packager/*.asc packager-revoked/*.asc > eyun.gpg
+cat master/*.asc master-revoked/*.asc packager/*.asc packager-revoked/*.asc > cygn.gpg
 
 popd >/dev/null

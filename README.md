@@ -1,6 +1,6 @@
-# EYUN Keyring
+# CYGN Keyring
 
-Repository for the EYUN keyring package.
+Repository for the CYGN keyring package.
 
 ## Addition/Removal/Update of a packaging key
 
