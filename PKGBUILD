@@ -9,7 +9,7 @@ url='https://github.com/atomlong/cygn-keyring'
 license=('GPL')
 install="${pkgname}.install"
 source=("https://github.com/atomlong/cygn-keyring/archive/${pkgver}.tar.gz")
-sha256sums=('c673acb8c4360c59fe4b54116071e1b6dc0ab9a5d212e8ed384152c02a72dd0b')
+sha256sums=('df1993437ec551626a2be0c911303841b4f389e0a8e441a395d078b263bf7fcc')
 
 package() {
   cd "cygn-keyring-${pkgver}"
